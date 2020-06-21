@@ -11,17 +11,22 @@ import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 import java.util.stream.Stream;
 
+import static java.lang.Math.round;
+import static java.lang.Math.sqrt;
+
 public class Program {
+
+
 	public static void main(String[] args) throws IOException {
 		List<Person> people = PeopleData.read("src/streamAPI/people.csv");
 		// TODO: Use stream API
 
-		/*people.stream()
+		people.stream()
 				.filter(person -> person.getGender().equals(Gender.FEMALE))
 				.filter(person -> person.getFirstName().length() < 4)
 				.map(person -> person.getFirstName())
 				.distinct()
-				.forEach(System.out::println);*/
+				.forEach(System.out::println);
 
 
 		people.stream()
@@ -71,30 +76,31 @@ public class Program {
 		System.out.println("Stream timestamp : " + String.valueOf(timeLastStream-timeFirstStream));
 
 		IntPredicate isPrime = x->{
-			for (int i = 2; i < x/2; i++) {
+			int y = (int) sqrt(x) + 1;
+			for (int i = 2; i < y; i++) {
 				if (x % i == 0) return false;
 			}
 			return true;
 		};
 
 		long counterPrime = IntStream.iterate(2, i-> i + 1)
-				.parallel()
 				.filter(isPrime)
 				.limit(100)
 				.max().getAsInt();
 
-		long counterPrimeBetween = IntStream.rangeClosed(2,1_000)
-				.parallel()
+		long counterPrimeBetween = IntStream.rangeClosed(2, 1_000_000)
 				.filter(isPrime)
 				.count();
 
 		System.out.println(counterPrime + " le grand nombre premier");
-		System.out.println(counterPrimeBetween + " la quantité de nombres premiers jusqu'à 1.000");
-
+		System.out.println(counterPrimeBetween + " la quantité de nombres premiers jusqu'à 1.000.000");
 
 
 
 	}
+
+
+
 
 
 }
